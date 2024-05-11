@@ -190,12 +190,14 @@ const rollDices = (game) => {
 const lockDice = (game, idDice) => {
   const indexDice = GameService.utils.findDiceIndexByDiceId(game.gameState.deck.dices, idDice);
 
+  // toggle dice lock state and unlock state
   game.gameState.deck.dices[indexDice].locked = !game.gameState.deck.dices[indexDice].locked;
 
   updateClientsViewDecks(game);
 };
 
 const selectChoice = (game, choiceId) => {
+  console.log('choiceId', choiceId);
   game.gameState.choices.idSelectedChoice = choiceId;
 
   game.gameState.grid = GameService.grid.resetcanBeCheckedCells(game.gameState.grid);
@@ -237,6 +239,8 @@ const selectGridCell = (game, cellId, rowIndex, cellIndex) => {
   if (game.gameState.currentTurn === 'bot' && game.gameState.isVsBotGame) {
     botPlay(game);
   }
+
+  isGameOver(game);
 };
 
 const isGameOver = (game) => {
@@ -280,11 +284,279 @@ const isGameOver = (game) => {
 // ----------------------------------------
 
 const createVsBotGame = (player1Socket) => {
-  createGame(player1Socket, '', true);
+  createGame(player1Socket, 'bot', true);
 };
 
+// const ALL_COMBINATIONS = [
+//   { id: 'brelan1', weights: 0.76852 },
+//   { id: 'brelan2', weights: 0.76852 },
+//   { id: 'brelan3', weights: 0.76852 },
+//   { id: 'brelan4', weights: 0.76852 },
+//   { id: 'brelan5', weights: 0.76852 },
+//   { id: 'brelan6', weights: 0.76852 },
+//   { id: 'moinshuit', weights: 0.787 },
+//   { id: 'suite', weights: 0.90741 },
+//   { id: 'sec', weights: 0.90741 },
+//   { id: 'full', weights: 0.94733 },
+//   { id: 'carre', weights: 0.96142 },
+//   { id: 'yam', weights: 0.99923 },
+//   { id: 'defi', weights: 0 }
+// ];
+
+// const ALL_BRELAN1_COMBINATIONS = [
+//   [1, 1, 1, 2, 3], [1, 1, 1, 2, 4], [1, 1, 1, 2, 5], [1, 1, 1, 2, 6], [1, 1, 1, 3, 4], 
+//   [1, 1, 1, 3, 5], [1, 1, 1, 3, 6], [1, 1, 1, 4, 5], [1, 1, 1, 4, 6], [1, 1, 1, 5, 6]
+// ];
+
+// const ALL_BRELAN2_COMBINATIONS = [
+//   [2, 2, 2, 1, 3], [2, 2, 2, 1, 4], [2, 2, 2, 1, 5], [2, 2, 2, 1, 6], [2, 2, 2, 3, 4],
+//   [2, 2, 2, 3, 5], [2, 2, 2, 3, 6], [2, 2, 2, 4, 5], [2, 2, 2, 4, 6], [2, 2, 2, 5, 6]
+// ];
+
+// const ALL_BRELAN3_COMBINATIONS = [
+//   [3, 3, 3, 1, 2], [3, 3, 3, 1, 4], [3, 3, 3, 1, 5], [3, 3, 3, 1, 6], [3, 3, 3, 2, 4],
+//   [3, 3, 3, 2, 5], [3, 3, 3, 2, 6], [3, 3, 3, 4, 5], [3, 3, 3, 4, 6], [3, 3, 3, 5, 6]
+// ];
+
+// const ALL_BRELAN4_COMBINATIONS = [
+//   [4, 4, 4, 1, 2], [4, 4, 4, 1, 3], [4, 4, 4, 1, 5], [4, 4, 4, 1, 6], [4, 4, 4, 2, 3],
+//   [4, 4, 4, 2, 5], [4, 4, 4, 2, 6], [4, 4, 4, 3, 5], [4, 4, 4, 3, 6], [4, 4, 4, 5, 6]
+// ];
+
+// const ALL_BRELAN5_COMBINATIONS = [
+//   [5, 5, 5, 1, 2], [5, 5, 5, 1, 3], [5, 5, 5, 1, 4], [5, 5, 5, 1, 6], [5, 5, 5, 2, 3],
+//   [5, 5, 5, 2, 4], [5, 5, 5, 2, 6], [5, 5, 5, 3, 4], [5, 5, 5, 3, 6], [5, 5, 5, 4, 6]
+// ];
+
+// const ALL_BRELAN6_COMBINATIONS = [
+//   [6, 6, 6, 1, 2], [6, 6, 6, 1, 3], [6, 6, 6, 1, 4], [6, 6, 6, 1, 5], [6, 6, 6, 2, 3],
+//   [6, 6, 6, 2, 4], [6, 6, 6, 2, 5], [6, 6, 6, 3, 4], [6, 6, 6, 3, 5], [6, 6, 6, 4, 5]
+// ];
+
+// const ALL_FULL_COMBINATIONS = [
+//   [1, 1, 1, 2, 2], [1, 1, 1, 3, 3], [1, 1, 1, 4, 4], [1, 1, 1, 5, 5], [1, 1, 1, 6, 6],
+//   [2, 2, 2, 1, 1], [2, 2, 2, 3, 3], [2, 2, 2, 4, 4], [2, 2, 2, 5, 5], [2, 2, 2, 6, 6],
+//   [3, 3, 3, 1, 1], [3, 3, 3, 2, 2], [3, 3, 3, 4, 4], [3, 3, 3, 5, 5], [3, 3, 3, 6, 6],
+//   [4, 4, 4, 1, 1], [4, 4, 4, 2, 2], [4, 4, 4, 3, 3], [4, 4, 4, 5, 5], [4, 4, 4, 6, 6],
+//   [5, 5, 5, 1, 1], [5, 5, 5, 2, 2], [5, 5, 5, 3, 3], [5, 5, 5, 4, 4], [5, 5, 5, 6, 6],
+//   [6, 6, 6, 1, 1], [6, 6, 6, 2, 2], [6, 6, 6, 3, 3], [6, 6, 6, 4, 4], [6, 6, 6, 5, 5]
+// ];
+
+// const ALL_CARRE_COMBINATIONS = [
+//   [1, 1, 1, 1, 2], [1, 1, 1, 1, 3], [1, 1, 1, 1, 4], [1, 1, 1, 1, 5], [1, 1, 1, 1, 6],
+//   [2, 2, 2, 2, 1], [2, 2, 2, 2, 3], [2, 2, 2, 2, 4], [2, 2, 2, 2, 5], [2, 2, 2, 2, 6],
+//   [3, 3, 3, 3, 1], [3, 3, 3, 3, 2], [3, 3, 3, 3, 4], [3, 3, 3, 3, 5], [3, 3, 3, 3, 6],
+//   [4, 4, 4, 4, 1], [4, 4, 4, 4, 2], [4, 4, 4, 4, 3], [4, 4, 4, 4, 5], [4, 4, 4, 4, 6],
+//   [5, 5, 5, 5, 1], [5, 5, 5, 5, 2], [5, 5, 5, 5, 3], [5, 5, 5, 5, 4], [5, 5, 5, 5, 6],
+//   [6, 6, 6, 6, 1], [6, 6, 6, 6, 2], [6, 6, 6, 6, 3], [6, 6, 6, 6, 4], [6, 6, 6, 6, 5]
+// ];
+
+// const ALL_YAM_COMBINATIONS = [
+//   [1, 1, 1, 1, 1], [2, 2, 2, 2, 2], [3, 3, 3, 3, 3], [4, 4, 4, 4, 4], [5, 5, 5, 5, 5], [6, 6, 6, 6, 6]
+// ];  
+
+// const ALL_SUITE_COMBINATIONS = [
+//   [1, 2, 3, 4, 5], [2, 3, 4, 5, 6]
+// ];
+
+// const ALL_MOINSHUIT_COMBINATIONS = [
+//   [1, 1, 1, 1, 1], [1, 1, 1, 1, 2], [1, 1, 1, 1, 3], [1, 1, 1, 1, 4],
+//   [1, 1, 1, 2, 2], [1, 1, 1, 2, 3], [1, 1, 2, 2, 2,]
+// ];
+
+// let grid_weights = [
+//   [1.0, 1.0, 0.0, 1.0, 1.0],
+//   [1.0, 1.5, 1.3, 1.4, 1.0],
+//   [1.2, 1.4, 1.6, 0.0, 1.3],
+//   [1.0, 1.3, 1.3, 1.2, 1.0],
+//   [1.0, 1.0, 1.5, 1.0, 1.0]
+// ]
+
+// const updateGrideWeights = (game) => {
+//   let current_matrix = GameService.grid.getMatrix(game.gameState.grid);
+
+//   for (let i = 0; i < 5; i++) {
+//     for (let j = 0; j < 5; j++) {
+//       grid_weights[i][j] = current_matrix[i][j] * grid_weights[i][j];
+//     }
+//   }
+
+//   TODO: update grid_weights with the current game state
+// };
+
+// const findBestMove = (game) => {
+
+//   TODO: find the algorithm to compare combinaisons and grid_weights
+
+// };
+
 const botPlay = (game) => {
-  console.log('bot is playing');
+  // rollDices(game);
+
+  // updateGrideWeights(game);
+
+  // findBestMove(game);
+
+  setTimeout(() => {
+    rollDices(game);
+
+    setTimeout(() => {
+      lockDice(game, 2);
+
+      setTimeout(() => {
+        rollDices(game);
+
+        setTimeout(() => {
+          lockDice(game, 1);
+
+          setTimeout(() => {
+            rollDices(game);
+
+            setTimeout(() => {
+              if(typeof game.gameState.choices.availableChoices[0] !== "undefined") {
+                selectChoice(game, game.gameState.choices.availableChoices[0].id);
+
+                setTimeout(() => {
+                  switch(game.gameState.choices.availableChoices[0].id) {
+
+                    case 'brelan1':
+                      if (game.gameState.grid[0][0].canBeChecked) {
+                        selectGridCell(game, game.gameState.grid[0][0].id, 0, 0);
+                      } else {
+                        if (game.gameState.grid[3][4].canBeChecked) {
+                          selectGridCell(game, game.gameState.grid[3][4].id, 3, 4);
+                        }
+                      }
+                      break;
+
+                    case 'brelan2':
+                      if (game.gameState.grid[1][0].canBeChecked) {
+                        selectGridCell(game, game.gameState.grid[1][0].id, 1, 0);
+                      } else {
+                        if (game.gameState.grid[4][1].canBeChecked) {
+                          selectGridCell(game, game.gameState.grid[4][1].id, 4, 1);
+                        }
+                      }
+                      break;
+
+                    case 'brelan3':
+                      if (game.gameState.grid[0][1].canBeChecked) {
+                        selectGridCell(game, game.gameState.grid[0][1].id, 0, 1);
+                      } else {
+                        if (game.gameState.grid[4][0].canBeChecked) {
+                          selectGridCell(game, game.gameState.grid[4][0].id, 4, 0);
+                        }
+                      }
+                      break;
+
+                    case 'brelan4':
+                      if (game.gameState.grid[0][3].canBeChecked) {
+                        selectGridCell(game, game.gameState.grid[0][3].id, 0, 3);
+                      } else {
+                        if (game.gameState.grid[4][4].canBeChecked) {
+                          selectGridCell(game, game.gameState.grid[4][4].id, 4, 4);
+                        }
+                      }
+                      break;
+
+                    case 'brelan5':
+                      if (game.gameState.grid[1][4].canBeChecked) {
+                        selectGridCell(game, game.gameState.grid[1][4].id, 1, 4);
+                      } else {
+                        if (game.gameState.grid[4][3].canBeChecked) {
+                          selectGridCell(game, game.gameState.grid[4][3].id, 4, 3);
+                        }
+                      }
+                      break;
+
+                    case 'brelan6':
+                      if (game.gameState.grid[0][4].canBeChecked) {
+                        selectGridCell(game, game.gameState.grid[0][4].id, 0, 4);
+                      } else {
+                        if (game.gameState.grid[3][0].canBeChecked) {
+                          selectGridCell(game, game.gameState.grid[3][0].id, 3, 0);
+                        }
+                      }
+                      break;
+
+                    case 'moinshuit':
+                      if (game.gameState.grid[2][0].canBeChecked) {
+                        selectGridCell(game, game.gameState.grid[2][0].id, 2, 0);
+                      } else {
+                        if (game.gameState.grid[3][3].canBeChecked) {
+                          selectGridCell(game, game.gameState.grid[3][3].id, 3, 3);
+                        }
+                      }
+                      break;
+
+                    case 'suite':
+                      if (game.gameState.grid[2][4].canBeChecked) {
+                        selectGridCell(game, game.gameState.grid[2][4].id, 2, 4);
+                      } else {
+                        if (game.gameState.grid[3][2].canBeChecked) {
+                          selectGridCell(game, game.gameState.grid[3][2].id, 3, 2);
+                        }
+                      }
+                      break;
+
+                    case 'sec':
+                      if (game.gameState.grid[1][2].canBeChecked) {
+                        selectGridCell(game, game.gameState.grid[1][2].id, 1, 2);
+                      } else {
+                        if (game.gameState.grid[3][1].canBeChecked) {
+                          selectGridCell(game, game.gameState.grid[3][1].id, 3, 1);
+                        }
+                      }
+                      break;
+
+                    case 'full':
+                      if (game.gameState.grid[1][3].canBeChecked) {
+                        selectGridCell(game, game.gameState.grid[1][3].id, 1, 3);
+                      } else {
+                        if (game.gameState.grid[2][1].canBeChecked) {
+                          selectGridCell(game, game.gameState.grid[2][1].id, 2, 1);
+                        }
+                      }
+                      break;
+
+                    case 'carre':
+                      if (game.gameState.grid[1][1].canBeChecked) {
+                        selectGridCell(game, game.gameState.grid[1][1].id, 1, 1);
+                      } else {
+                        if (game.gameState.grid[4][2].canBeChecked) {
+                          selectGridCell(game, game.gameState.grid[4][2].id, 4, 2);
+                        }
+                      }
+                      break;
+
+                    case 'yam':
+                      if (game.gameState.grid[2][2].canBeChecked) {
+                        selectGridCell(game, game.gameState.grid[2][2].id, 2, 2);
+                      } 
+                      break;
+
+                    case 'defi':
+                      if (game.gameState.grid[0][2].canBeChecked) {
+                        selectGridCell(game, game.gameState.grid[0][2].id, 0, 2);
+                      } else {
+                        if (game.gameState.grid[2][3].canBeChecked) {
+                          selectGridCell(game, game.gameState.grid[2][3].id, 2, 3);
+                        }
+                      }
+                      break;
+
+                    default:
+                      break;
+                  }
+                }, 1000);
+              }
+            }, 1000);
+          }, 1000);
+        }, 1000);
+      }, 1000);
+    }, 1000);
+  }, 1000);
+
 };
 
 // ---------------------------------------
@@ -322,8 +594,6 @@ io.on('connection', socket => {
   socket.on('game.grid.selected', (data) => {
     const gameIndex = GameService.utils.findGameIndexBySocketId(games, socket.id);
     selectGridCell(games[gameIndex], data.cellId, data.rowIndex, data.cellIndex);
-
-    isGameOver(games[gameIndex])
   });
 
   socket.on('game.close', () => {

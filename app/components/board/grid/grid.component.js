@@ -36,6 +36,7 @@ const Grid = () => {
                                     styles.cell,
                                     cell.owner === "player:1" && styles.playerOwnedCell,
                                     cell.owner === "player:2" && styles.opponentOwnedCell,
+                                    cell.owner === "bot" && styles.opponentOwnedCell,
                                     (cell.canBeChecked && !(cell.owner === "player:1") && !(cell.owner === "player:2")) && styles.canBeCheckedCell,
                                     rowIndex !== 0 && styles.topBorder,
                                     cellIndex !== 0 && styles.leftBorder,

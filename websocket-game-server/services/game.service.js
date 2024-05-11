@@ -349,81 +349,81 @@ const GameService = {
                 locked: true // Verrouille chaque dé
             }));
             return lockedDices;
+        },
+
+        getMaxReRolls: () => {
+            return MAX_ROLLS;
         }
     },
 
     choices: {
         findCombinations: (dices, isDefi, isSec) => {
-            // const availableCombinations = [];
-            // const allCombinations = ALL_COMBINATIONS;
+            const availableCombinations = [];
+            const allCombinations = ALL_COMBINATIONS;
 
-            // const counts = Array(7).fill(0); // Tableau pour compter le nombre de dés de chaque valeur (de 1 à 6)
-            // let hasPair = false; // Pour vérifier si une paire est présente
-            // let threeOfAKindValue = null; // Stocker la valeur du brelan
-            // let hasThreeOfAKind = false; // Pour vérifier si un brelan est présent
-            // let hasFourOfAKind = false; // Pour vérifier si un carré est présent
-            // let hasFiveOfAKind = false; // Pour vérifier si un Yam est présent
-            // let hasStraight = false; // Pour vérifier si une suite est présente
-            // let sum = 0; // Somme des valeurs des dés
+            const counts = Array(7).fill(0); // Tableau pour compter le nombre de dés de chaque valeur (de 1 à 6)
+            let hasPair = false; // Pour vérifier si une paire est présente
+            let threeOfAKindValue = null; // Stocker la valeur du brelan
+            let hasThreeOfAKind = false; // Pour vérifier si un brelan est présent
+            let hasFourOfAKind = false; // Pour vérifier si un carré est présent
+            let hasFiveOfAKind = false; // Pour vérifier si un Yam est présent
+            let hasStraight = false; // Pour vérifier si une suite est présente
+            let sum = 0; // Somme des valeurs des dés
 
-            // // Compter le nombre de dés de chaque valeur et calculer la somme
-            // for (let i = 0; i < dices.length; i++) {
-            //     const diceValue = parseInt(dices[i].value);
-            //     counts[diceValue]++;
-            //     sum += diceValue;
-            // }
+            // Compter le nombre de dés de chaque valeur et calculer la somme
+            for (let i = 0; i < dices.length; i++) {
+                const diceValue = parseInt(dices[i].value);
+                counts[diceValue]++;
+                sum += diceValue;
+            }
 
-            // // Vérifier les combinaisons possibles
-            // for (let i = 1; i <= 6; i++) {
-            //     if (counts[i] === 2) {
-            //         hasPair = true;
-            //     } else if (counts[i] === 3) {
-            //         threeOfAKindValue = i;
-            //         hasThreeOfAKind = true;
-            //     } else if (counts[i] === 4) {
-            //         threeOfAKindValue = i;
-            //         hasThreeOfAKind = true;
-            //         hasFourOfAKind = true;
-            //     } else if (counts[i] === 5) {
-            //         threeOfAKindValue = i;
-            //         hasThreeOfAKind = true;
-            //         hasFourOfAKind = true;
-            //         hasFiveOfAKind = true;
-            //     }
-            // }
+            // Vérifier les combinaisons possibles
+            for (let i = 1; i <= 6; i++) {
+                if (counts[i] === 2) {
+                    hasPair = true;
+                } else if (counts[i] === 3) {
+                    threeOfAKindValue = i;
+                    hasThreeOfAKind = true;
+                } else if (counts[i] === 4) {
+                    threeOfAKindValue = i;
+                    hasThreeOfAKind = true;
+                    hasFourOfAKind = true;
+                } else if (counts[i] === 5) {
+                    threeOfAKindValue = i;
+                    hasThreeOfAKind = true;
+                    hasFourOfAKind = true;
+                    hasFiveOfAKind = true;
+                }
+            }
 
-            // const sortedValues = dices.map(dice => parseInt(dice.value)).sort((a, b) => a - b); // Trie les valeurs de dé
+            const sortedValues = dices.map(dice => parseInt(dice.value)).sort((a, b) => a - b); // Trie les valeurs de dé
 
-            // // Vérifie si les valeurs triées forment une suite
-            // hasStraight = sortedValues.every((value, index) => index === 0 || value === sortedValues[index - 1] + 1);
+            // Vérifie si les valeurs triées forment une suite
+            hasStraight = sortedValues.every((value, index) => index === 0 || value === sortedValues[index - 1] + 1);
 
-            // // Vérifier si la somme ne dépasse pas 8
-            // const isLessThanEqual8 = sum <= 8;
+            // Vérifier si la somme ne dépasse pas 8
+            const isLessThanEqual8 = sum <= 8;
 
-            // // Retourner les combinaisons possibles via leur ID
-            // allCombinations.forEach(combination => {
-            //     if (
-            //         (combination.id.includes('brelan') && hasThreeOfAKind && parseInt(combination.id.slice(-1)) === threeOfAKindValue) ||
-            //         (combination.id === 'full' && hasPair && hasThreeOfAKind) ||
-            //         (combination.id === 'carre' && hasFourOfAKind) ||
-            //         (combination.id === 'yam' && hasFiveOfAKind) ||
-            //         (combination.id === 'suite' && hasStraight) ||
-            //         (combination.id === 'moinshuit' && isLessThanEqual8) ||
-            //         (combination.id === 'defi' && isDefi)
-            //     ) {
-            //         availableCombinations.push(combination);
-            //     }
-            // });
+            // Retourner les combinaisons possibles via leur ID
+            allCombinations.forEach(combination => {
+                if (
+                    (combination.id.includes('brelan') && hasThreeOfAKind && parseInt(combination.id.slice(-1)) === threeOfAKindValue) ||
+                    (combination.id === 'full' && hasPair && hasThreeOfAKind) ||
+                    (combination.id === 'carre' && hasFourOfAKind) ||
+                    (combination.id === 'yam' && hasFiveOfAKind) ||
+                    (combination.id === 'suite' && hasStraight) ||
+                    (combination.id === 'moinshuit' && isLessThanEqual8) ||
+                    (combination.id === 'defi' && isDefi)
+                ) {
+                    availableCombinations.push(combination);
+                }
+            });
 
+            const notOnlyBrelan = availableCombinations.some(combination => !combination.id.includes('brelan'));
 
-            // const notOnlyBrelan = availableCombinations.some(combination => !combination.id.includes('brelan'));
-
-            // if (isSec && availableCombinations.length > 0 && notOnlyBrelan) {
-            //     availableCombinations.push(allCombinations.find(combination => combination.id === 'sec'));
-            // }
-
-            // mock and make all combinations available
-            const availableCombinations = ALL_COMBINATIONS;
+            if (isSec && availableCombinations.length > 0 && notOnlyBrelan) {
+                availableCombinations.push(allCombinations.find(combination => combination.id === 'sec'));
+            }
 
             return availableCombinations;
         }
@@ -523,6 +523,18 @@ const GameService = {
             }
 
             return false;
+        },
+
+        getMatrix: (grid) => {
+            let matrix = [[], [], [], [], []];
+
+            for (let i = 0; i < 5; i++) {
+                for (let j = 0; j < 5; j++) {
+                    matrix[i][j] = (grid[i][j].owner === null) ? 1 : 0;
+                }
+            }
+
+            return matrix;
         }
     },
 

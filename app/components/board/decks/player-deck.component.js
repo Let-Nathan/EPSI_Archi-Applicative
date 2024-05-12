@@ -55,8 +55,8 @@ const PlayerDeck = () => {
 
             <>
               <View style={styles.rollInfoContainer}>
-                <Text style={styles.rollInfoText}>
-                  Lancer {rollsCounter} / {rollsMaximum}
+                <Text style={[styles.rollInfoText, {fontSize: 20, fontWeight: 'bold'}]}>
+                  Lancer {rollsCounter - 1} / {rollsMaximum}
                 </Text>
               </View>
             </>

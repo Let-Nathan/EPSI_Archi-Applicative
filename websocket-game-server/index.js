@@ -197,7 +197,6 @@ const lockDice = (game, idDice) => {
 };
 
 const selectChoice = (game, choiceId) => {
-  console.log('choiceId', choiceId);
   game.gameState.choices.idSelectedChoice = choiceId;
 
   game.gameState.grid = GameService.grid.resetcanBeCheckedCells(game.gameState.grid);
@@ -223,12 +222,6 @@ const selectGridCell = (game, cellId, rowIndex, cellIndex) => {
   game.player1Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:1', game.gameState));
   if (!game.gameState.isVsBotGame) { game.player2Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:2', game.gameState)); }
 
-  updateClientsViewDecks(game);
-  updateClientsViewScores(game);
-  updateClientsViewTokens(game);
-  updateClientsViewChoices(game);
-  updateClientsViewGrid(game);
-
   if (!game.gameState.isVsBotGame) { 
     game.gameState.currentTurn = game.gameState.currentTurn === 'player:1' ? 'player:2' : 'player:1'; 
   }
@@ -239,6 +232,12 @@ const selectGridCell = (game, cellId, rowIndex, cellIndex) => {
   if (game.gameState.currentTurn === 'bot' && game.gameState.isVsBotGame) {
     botPlay(game);
   }
+
+  updateClientsViewDecks(game);
+  updateClientsViewScores(game);
+  updateClientsViewTokens(game);
+  updateClientsViewChoices(game);
+  updateClientsViewGrid(game);
 
   isGameOver(game);
 };
@@ -268,7 +267,11 @@ const isGameOver = (game) => {
       game.gameState.victoryCondition = 'line';
     }
     else {
-      game.gameState.victoryCondition = 'score';
+      if (game.gameState.winner === game.gameState.loser === 'draw')
+        game.gameState.victoryCondition = 'draw';
+      else {
+        game.gameState.victoryCondition = 'score';
+      }
     }
 
     updateClientsViewResult(game);

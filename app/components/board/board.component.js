@@ -21,29 +21,29 @@ const Board = ({ gameViewState }) => {
 
       <View style={[styles.row, { height: '5%' }]}>
         <OpponentInfos />
-        <View style={styles.opponentTimerScoreContainer}>
+        <View style={[styles.opponentTimerScoreContainer, styles.woodBanner]}>
           <OpponentTimer />
           <OpponentScore />
           <OpponentTokens />
         </View>
       </View>
 
-      <View style={[styles.row, { height: '25%' }]}>
+      <View style={[styles.row, { height: '25%' }, styles.fruits]}>
         <OpponentDeck />
       </View>
 
-      <View style={[styles.row, { height: '40%' }]}>
+      <View style={[styles.row, { height: '40%' }, styles.woodBanner]}>
         <Grid />
         <Choices />
       </View>
 
-      <View style={[styles.row, { height: '25%' }]}>
+      <View style={[styles.row, { height: '25%' }, styles.fruits]}>
         <PlayerDeck />
       </View>
 
       <View style={[styles.row, { height: '5%' }]}>
         <PlayerInfos />
-        <View style={styles.playerTimerScoreContainer}>
+        <View style={[styles.opponentTimerScoreContainer, styles.woodBanner]}>
           <PlayerTimer />
           <PlayerScore />
           <PlayerTokens />
@@ -84,7 +84,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: "lightgrey"
-  }
+  },
+  woodBanner: {
+    backgroundImage : "url(./app/assets/wood-banner.png)",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat"
+  },
+  fruits: {
+    backgroundImage: "url(./app/assets/background.home-page.jpeg)",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat"
+  },
 });
 
 export default Board;

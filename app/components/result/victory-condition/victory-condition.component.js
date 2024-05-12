@@ -36,6 +36,16 @@ const VictoryCondition = () => {
 
         );
 
+    } else {
+
+        return (
+
+            <View>
+                <Text>La partie n'a été remportée par aucun joueur.</Text>
+            </View>
+
+        );
+
     }
 }
 

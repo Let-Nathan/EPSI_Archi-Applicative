@@ -17,7 +17,7 @@ const OpponentInfos = () => {
 
     return (
             
-        <View style={styles.opponentInfosContainer}>
+        <View style={[styles.opponentInfosContainer, styles.woodBanner]}>
             <Text>Opponent Infos: {opponentInfos}</Text>
         </View>
 
@@ -32,6 +32,11 @@ const styles = StyleSheet.create({
         borderRightWidth: 1,
         borderColor: 'black',
         backgroundColor: "lightgrey"
+    },
+    woodBanner: {
+        backgroundImage : "url(./app/assets/wood-banner.png)",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat"
     }
 });
 

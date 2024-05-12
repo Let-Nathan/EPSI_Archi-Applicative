@@ -20,7 +20,7 @@ const VictoryCondition = () => {
         return (
 
             <View>
-                <Text>La partie a été remportée car une ligne a été complétée.</Text>
+                <Text style={{fontSize: 20, fontWeight: 'bold'}}>La partie a été remportée car une ligne a été complétée.</Text>
             </View>
 
         );
@@ -31,7 +31,7 @@ const VictoryCondition = () => {
         return (
 
             <View>
-                <Text>La partie a été remportée par le joueur ayant le plus de points.</Text>
+                <Text style={{fontSize: 20, fontWeight: 'bold'}}>La partie a été remportée par le joueur ayant le plus de points.</Text>
             </View>
 
         );
@@ -41,7 +41,7 @@ const VictoryCondition = () => {
         return (
 
             <View>
-                <Text>La partie n'a été remportée par aucun joueur.</Text>
+                <Text style={{fontSize: 20, fontWeight: 'bold'}}>La partie n'a été remportée par aucun joueur.</Text>
             </View>
 
         );

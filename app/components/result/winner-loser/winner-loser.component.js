@@ -22,7 +22,7 @@ const WinnerAndLoser = () => {
         return (
 
             <View>
-                <Text>Match nul.</Text>
+                <Text style={{fontSize: 20, fontWeight: 'bold'}}>Match nul.</Text>
             </View>
 
         );
@@ -32,8 +32,8 @@ const WinnerAndLoser = () => {
     return (
             
         <View>
-            <Text>Le gagnant est {winner}.</Text> 
-            <Text>Le perdant est {loser}.</Text>
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Le gagnant est {winner}.</Text> 
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Le perdant est {loser}.</Text>
         </View>
 
     );
